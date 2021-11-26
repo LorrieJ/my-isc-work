@@ -34,10 +34,26 @@ class DataStore:
             print(time, value)
 
     def get_max(self):
-        max(self.measurements)
+        return max(self.measurements)
 
     def get_min(self):
-        min(self.measurements)
+        return min(self.measurements)
 
     def get_mean(self):
-        sum(self.measurements)/len(self.measurements)
+        return sum(self.measurements)/len(self.measurements)
+
+class AccumulatingStore(DataStore):
+    def __init__(self):
+        super().__init__()
+        self.accumulation = []
+
+    def add_measurement(self, date, value):
+        super().add_measurement(date, value)
+        # set a 0 value for the case where this is the first measurement
+        last_acc = 0
+        # Get the last accumulated value if we already have some
+        if self.accumulation:
+            last_acc = self.acc[-1]
+
+            # add the accumulated value
+            self.accumulation.append(last_acc + value)
